@@ -733,10 +733,10 @@ return message
 end
 end
 
---================================{{  List owner  }} ===================================
+--================================{{  List monsha  }} ===================================
 
-function ownerlist(msg)
-local message = '*⭐️¦ المنشئيين :*\n\n'
+function monshe(msg)
+local message = '*⭐️¦ قائمه المنشئين :*\n\n'
 local monsha = redis:smembers(veer..':MONSHA_BOT:'..msg.chat_id_)
 if #monsha == 0 then 
 message = message .."📛| Not Creator ~⪼ لا يوجد منشئيين !\n"
@@ -757,7 +757,18 @@ message = message .."`★_l` "..(username or Name)..' » (`' ..v.. '`) \n'
 end
 end
 end
-message = message..'*----------------------------------\n\n📋¦ قائمه المدراء :*\n\n'
+if utf8.len(message) > 4096 then
+return "📛| لا يمكن عرض المنشئين بسبب القائمه كبيره جدا ."
+else
+return message
+end
+end
+
+
+--================================{{  List owner  }} ===================================
+
+function ownerlist(msg)
+local message = '*📋¦ قائمه المدراء :*\n\n'
 local list = redis:smembers(veer..'owners:'..msg.chat_id_)
 if #list == 0 then  
 message = message.."📛| Not Director ~⪼ لا يوجد مدراء !\n" 
