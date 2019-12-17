@@ -3024,7 +3024,7 @@ text = [[💯¦ مـرحبآ آنآ بوت آسـمـي []]..redis:get(veer..':N
 end
 xsudouser = SUDO_USER:gsub('⚖️¦ مـعرف آلمـطـور  : @','')
 xsudouser = xsudouser:gsub([[\_]],'_')
-local inline = {{{text="آلمـطـور 𖣘",url="t.me/"..xsudouser}}}
+local inline = {{{text="آلمـطـور 💬!",url="t.me/"..xsudouser}}}
 send_key(msg.sender_user_id_,text,nil,inline,msg.id_)
 return false
 end
@@ -3325,7 +3325,7 @@ redis:set(veer..'linkGroup'..msg.chat_id_,Flter_Markdown(msg.text))
 return sendMsg(msg.chat_id_,msg.id_,'🗯¦ الان تم وضع الرابط جديد 🍃')
 end
 
-if msg.SudoUser and redis:get(veer..'fwd:all'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه عام
+if redis:get(veer..'fwd:all'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه عام
 redis:del(veer..'fwd:all'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')  
 local groups = redis:smembers(veer..'group:ids')
@@ -3334,18 +3334,15 @@ if allgp >= 300 then
 sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات وللمشتركين ...')			
 end
 for i = 1, #pv do 
-sendMsg(pv[i],0,Flter_Markdown(msg.text),nil,function(arg,data)
-end,{pv=pv[i]})
+sendMsg(pv[i],0,Flter_Markdown(msg.text))
 end
 for i = 1, #groups do 
-sendMsg(groups[i],0,Flter_Markdown(msg.text),nil,function(arg,data)
-end,{groups=groups[i]})
+sendMsg(groups[i],0,Flter_Markdown(msg.text))
 end
-sendMsg(arg.chat_id_,arg.id_,'📑*¦* تم الاذاعه بنجاح ✓')
-return false
+return sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه الكليشه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* گروب \n👥*¦* للمـشـترگين » '..#pv..' مـشـترگ \n✓')
 end
 
-if msg.SudoUser and redis:get(veer..'fwd:pv'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
+if redis:get(veer..'fwd:pv'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
 redis:del(veer..'fwd:pv'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')
 if #pv >= 300 then
@@ -3353,36 +3350,26 @@ sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| ج�
 end
 local NumPvDel = 0
 for i = 1, #pv do
-sendMsg(pv[i],0,Flter_Markdown(msg.text),nil,function(arg,data)
-if arg.countpv == i then 
-local SenderOk = arg.countpv - NumPvDel
-sendMsg(arg.chat_id_,arg.id_,'📑*¦* تم الاذاعه بنجاح ✓')
+sendMsg(pv[i],0,Flter_Markdown(msg.text))
 end
-end,{chat_id_=msg.chat_id_,id_=msg.id_,pv=pv[i],countpv=#pv[i]})
-end
+sendMsg(msg.chat_id_,msg.id_,'🙍🏼‍♂️*¦* عدد المشتركين : '..#pv..'\n🗣*¦* تم الاذاعه بنجاح ✓') 
 end
 
-if msg.SudoUser and redis:get(veer..'fwd:groups'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
+if redis:get(veer..'fwd:groups'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
 redis:del(veer..'fwd:groups'..msg.sender_user_id_)
 local groups = redis:smembers(veer..'group:ids')
 if #groups >= 300 then
 sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر الرساله للمجموعات ...')			
 end
+local NumGroupsDel = 0
 for i = 1, #groups do 
-print(#groups.." : "..i.."\n\n========================")
-
-sendMsg(groups[i],0,Flter_Markdown(msg.text),function(arg,data)
-print(arg.countgroups.." : "..arg.i)
-if arg.countgroups == arg.i then
-sendMsg(arg.chat_id_,arg.id_,'📑*¦* تم الاذاعه بنجاح ✓')
+sendMsg(groups[i],0,Flter_Markdown(msg.text))
 end
-end,{chat_id_=msg.chat_id_,id_=msg.id_,countgroups=#groups,i=i})
-end
-return false
+sendMsg(msg.chat_id_,msg.id_,'📑*¦* عدد المجموعات •⊱ { *'..#groups..'* } ⊰•\n🗣*¦* تـم الاذاعه بنجاح ✓')
 end 
 end 
 
-if msg.SudoUser and msg.forward_info_ and redis:get(veer..'fwd:'..msg.sender_user_id_) then
+if msg.forward_info_ and redis:get(veer..'fwd:'..msg.sender_user_id_) then
 redis:del(veer..'fwd:'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')
 local groups = redis:smembers(veer..'group:ids')
@@ -3397,8 +3384,7 @@ end
 for i = 1, #groups do 
 fwdMsg(groups[i],msg.chat_id_,msg.id_,dl_cb,nil)
 end
-sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه التوجيه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* \n👥*¦* للخآص » '..#pv..'\n✓')	
-return false
+return sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه التوجيه بنجاح 🏌🏻\n🗣*¦* للمـجمـوعآت » *'..#groups..'* \n👥*¦* للخآص » '..#pv..'\n✓')			
 end
 
  
