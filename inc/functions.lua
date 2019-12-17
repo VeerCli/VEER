@@ -722,7 +722,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`){'..count..'} \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`){'..count..'} \n'
 end
 end 
 end
@@ -753,7 +753,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message .."`★_l` "..(username or Name)..' » (`' ..v.. '`) \n'
+message = message .."`★_l` ["..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end
 end
@@ -778,7 +778,7 @@ local info = redis:hgetall(veer..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
 username = info.username
 username = username:gsub([[\_]],"_")
-message = message ..k.. '-l '..(username or '')..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or '')..'] » (`' ..v.. '`) \n'
 else
 if info.username:match("^(%d+)") then
 username = info.username
@@ -787,7 +787,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end
 end
@@ -807,7 +807,7 @@ message = '📋*¦ قائمه الادمنيه :*\n\n'
 for k,v in pairs(list) do
 local info = redis:hgetall(veer..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
-message = message ..k.. '-l '..info.username..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
 if info.username:match("^(%d+)") then
 username = info.username
@@ -816,7 +816,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -846,7 +846,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -885,7 +885,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end
 if utf8.len(message) > 4096 then
@@ -925,7 +925,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end 
 end 
 if utf8.len(message) > 4096 then
@@ -964,7 +964,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l '..(username or Name)..' » (`' ..v.. '`) \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`) \n'
 end
 end 
 if utf8.len(message) > 4096 then
