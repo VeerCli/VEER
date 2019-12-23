@@ -10,6 +10,8 @@
 #                                        ███    ███ 
 #------------------------------------------------------
 ]]
+-- TokenGithub = '961679341:AAEQLLvt2JZ6Nl5pE2PKwTmHg7LIyKui2ZA'  أقوا توكن بالكيثاب 😌😂
+
 local function iVeer(msg,MsgText)
 
 if msg.type ~= 'pv' then
