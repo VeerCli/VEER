@@ -744,6 +744,7 @@ else
 for k,v in pairs(monsha) do
 local info = redis:hgetall(veer..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
+info.username = info.username:gsub([[\_]],"_")
 message = message .."`★_l` ["..info.username..'] » (`' ..v.. '`) \n'
 else
 if info.username:match("^(%d+)") then
@@ -807,6 +808,7 @@ message = '📋*¦ قائمه الادمنيه :*\n\n'
 for k,v in pairs(list) do
 local info = redis:hgetall(veer..'username:'..v)
 if info and info.username and info.username:match("@[%a%d_]+") then
+info.username = info.username:gsub([[\_]],"_")
 message = message ..k.. '-l ['..info.username..'] » (`' ..v.. '`) \n'
 else
 if info.username:match("^(%d+)") then
