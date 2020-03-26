@@ -1189,10 +1189,29 @@ end
 if MsgText[1] == "تاك للكل" then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
 tdcli_function({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub('-100',''), offset_ = 0,limit_ = 200
-},function(ta,taha)
+},function(ver,veer)
 local t = "\n👥¦ قائمة الاعضاء \n━━━━━━━━━━━━━\n"
 x = 0
-local list = taha.members_
+local list = veer.members_
+for k, v in pairs(list) do
+x = x + 1
+t = t..""..x.." - {["..v.user_id_.."](tg://user?id="..v.user_id_..")} \n"
+end
+send_msg(msg.chat_id_,t,msg.id_)
+end,nil)
+end
+
+if Text:match("^كلهم (.*)$") then
+if utf8.len(Text:match("^كلهم (.*)$")) > 50 then 
+return "📛| ما اكدر اكلهم اكثر من 50 حرف 🙌🏾"
+end
+if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
+tdcli_function({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub('-100',''), offset_ = 0,limit_ = 200
+},function(ver,veer)
+local Veer_Text = Text:match("^كلهم (.*)$"),50
+local t = "\n🗣¦ "..Veer_Text.."\n━━━━━━━━━━━━━\n"
+x = 0
+local list = veer.members_
 for k, v in pairs(list) do
 x = x + 1
 t = t..""..x.." - {["..v.user_id_.."](tg://user?id="..v.user_id_..")} \n"
@@ -4455,6 +4474,7 @@ Veer = {
 "^(مسح) (.+)$",
 '^(منع) (.+)$',
 '^(الغاء منع) (.+)$',
+'^(كلهم) (.+)$',
 "^(حظر عام)$",
 "^(حظر عام) (@[%a%d_]+)$",
 "^(حظر عام) (%d+)$",
