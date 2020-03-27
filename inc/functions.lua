@@ -719,11 +719,11 @@ message = message ..k.. '-l ['..(info.username or '')..'] » (`' ..v.. '`){'..co
 else
 if info.username:match("^(%d+)") then
 username = info.username
-Name = info.first_name_ .." "..info.last_name_ 
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
+Name = info.first_name_ .." "..info.last_name_ 
 end
-message = message ..k.. '-l ['..(username or 'Not Found')..']'..username..' » (`' ..v.. '`){'..count..'} \n'
+message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`){'..count..'} \n'
 end
 end 
 end
