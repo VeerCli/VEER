@@ -714,13 +714,13 @@ for k,v in pairs(list) do
 local info = redis:hgetall(veer..'username:'..v)
 local count = redis:scard(veer..'mtwr_count'..v)
 info.username = info.username:gsub([[\_]],"_")
+Name = info.first_name_ .." "..info.last_name_ 
 if info and info.username and info.username:match("@[%a%d_]+") then
 message = message ..k.. '-l ['..(info.username or '')..'] » (`' ..v.. '`){'..count..'} \n'
 else
 if info.username:match("^(%d+)") then
 username = info.username
 else
-Name = info.first_name_ .." "..info.last_name_ 
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
 message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`){'..count..'} \n'
