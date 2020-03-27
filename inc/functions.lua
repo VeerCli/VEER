@@ -706,6 +706,7 @@ end
 
 function sudolist(msg)
 local list = redis:smembers(veer..':SUDO_BOT:')
+SUDO_USER = SUDO_USER:gsub([[\_]],"_")
 message = '👨🏽‍💻*¦* قائمه الـمـطـوريـن : \n\n`★`*_* ['..SUDO_USER..'] ➣ (`' ..SUDO_ID.. '`){'..redis:scard(veer..'mtwr_count'..SUDO_ID)..'}\n*----------------------------------*\n'
 if #list==0 then  message = message.."* لا يوجد مطورين حاليا \n📛 *"
 else
@@ -727,7 +728,7 @@ end
 end 
 end
 if utf8.len(message) > 4096 then
-return "📛| لا يمكن عرض الردود بسبب القائمه كبيره جدا ."
+return "📛| لا يمكن عرض المطورين بسبب القائمه كبيره جدا ."
 else
 return message
 end
