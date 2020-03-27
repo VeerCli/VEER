@@ -723,7 +723,7 @@ Name = info.first_name_ .." "..info.last_name_
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
-message = message ..k.. '-l ['..(username or 'Not Found')..'](tg://user?id='..v..') » (`' ..v.. '`){'..count..'} \n'
+message = message ..k.. '-l ['..(username or 'Not Found')..']('..username..') » (`' ..v.. '`){'..count..'} \n'
 end
 end 
 end
