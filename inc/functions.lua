@@ -720,8 +720,8 @@ else
 if info.username:match("^(%d+)") then
 username = info.username
 else
-username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 Name = info.first_name_ .." "..info.last_name_ 
+username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
 message = message ..k.. '-l ['..(username or Name)..'] » (`' ..v.. '`){'..count..'} \n'
 end
