@@ -564,7 +564,7 @@ function tdcli_update_callback(data)
 	if UpdateSourceStart then
 	UpdateSourceStart = false
 	EditMsg(data.message_.chat_id_,data.message_.id_,'10% - |█          |')
-        download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/run','./run')
+	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/run','./run')
 	EditMsg(data.message_.chat_id_,data.message_.id_,'20% - |███         |')
 	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/Run.lua','./inc/Run.lua')
 	EditMsg(data.message_.chat_id_,data.message_.id_,'40% - |█████       |')
