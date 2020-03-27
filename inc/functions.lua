@@ -719,6 +719,7 @@ message = message ..k.. '-l ['..(info.username or '')..'] » (`' ..v.. '`){'..co
 else
 if info.username:match("^(%d+)") then
 username = info.username
+username = username:gsub([[\_]],"_")
 Name = info.first_name_ .." "..info.last_name_ 
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
