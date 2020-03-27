@@ -720,7 +720,8 @@ else
 if info.username:match("^(%d+)") then
 username = info.username
 username = username:gsub([[\_]],"_")
-Name = FlterName(info.first_name_ .." "..info.last_name_,50)
+Name = info.first_name_ .." "..info.last_name_
+Name = FlterName(Name)
 else
 username = info.username:match("[(]tg://user[?]id=(%d+)[)]")
 end
