@@ -741,7 +741,7 @@ USERCAR = utf8.len(USERNAME)
 local namei = data.first_name_..' '..(data.last_name_ or "")
 if data.username_ then useri = '@'..data.username_ else useri = " لا يوجد " end
 SendMention(arg.ChatID,arg.UserID,arg.MsgID,'🤵🏼¦ الاسم » '..namei..'\n'
-..'🎫¦ الايدي » {'..arg.UserID..'} \n'
+..'🎫¦ الايدي » {`'..arg.UserID..'`} \n'
 ..'🎟¦ المعرف » '..useri..'\n'
 ..'📮¦ الرتبه » '..Getrtba(arg.UserID,arg.ChatID)..'\n'
 ..'🕵🏻️‍♀️¦ نوع الكشف » بالرد\n➖',13,utf8.len(namei))
@@ -2361,7 +2361,7 @@ if not msg.SudoBase then return"📛*¦* هذا الامر يخص {المطور 
 return "💯 البوت شـغــال 🚀" 
 end
 
-if (MsgText[1]== "ايدي" or MsgText[1]=="ايدي 🆔") and msg.type == "pv" then return  "\n"..msg.sender_user_id_.."\n"  end
+if (MsgText[1]== "ايدي" or MsgText[1]=="ايدي 🆔") and msg.type == "pv" then return  "\n`"..msg.sender_user_id_.."`\n"  end
 
 if MsgText[1]== "قناة السورس 📡" and msg.type == "pv" then
 local inline = {{{text="فير : فـيـر 🍃",url="t.me/veercli"}}}
