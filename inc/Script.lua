@@ -741,7 +741,7 @@ USERCAR = utf8.len(USERNAME)
 local namei = data.first_name_..' '..(data.last_name_ or "")
 if data.username_ then useri = '@'..data.username_ else useri = " لا يوجد " end
 SendMention(arg.ChatID,arg.UserID,arg.MsgID,'🤵🏼¦ الاسم » '..namei..'\n'
-..'🎫¦ الايدي » {`'..arg.UserID..'`} \n'
+..'🎫¦ الايدي » {'..arg.UserID..'} \n'
 ..'🎟¦ المعرف » '..useri..'\n'
 ..'📮¦ الرتبه » '..Getrtba(arg.UserID,arg.ChatID)..'\n'
 ..'🕵🏻️‍♀️¦ نوع الكشف » بالرد\n➖',13,utf8.len(namei))
