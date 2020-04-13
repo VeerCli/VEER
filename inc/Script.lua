@@ -46,6 +46,7 @@ if data.last_name_ then Name = data.first_name_ .." "..data.last_name_ else Name
 local Namei = FlterName(data,20)
 local NumGhaVeer = (redis:get(veer..':adduser:'..msg.chat_id_..':'..msg.sender_user_id_) or 0)
 local editedveer = (redis:get(veer..':edited:'..msg.chat_id_..':'..msg.sender_user_id_) or 0)
+local gamesveer = (redis:get(veer..':User_Points:'..msg.chat_id_..msg.sender_user_id_) or 0)
 if not redis:get(veer..':lock_id_photo:'..arg.chat_id_) then
 IdVeerSaied = (redis:get(veer..'idveer:msg'..msg.chat_id_) or 
 '👤¦ أســمـك •⊱ { '..Namei..' } ⊰•\n'
@@ -62,6 +63,7 @@ IdVeerSaied = IdVeerSaied:gsub("{التفاعل}",Get_Ttl(msgs))
 IdVeerSaied = IdVeerSaied:gsub("{الرسائل}",msgs)
 IdVeerSaied = IdVeerSaied:gsub("{الجهات}",NumGhaVeer)
 IdVeerSaied = IdVeerSaied:gsub("{السحكات}",editedveer)
+IdVeerSaied = IdVeerSaied:gsub("{النقاط}",gamesveer)
 sendMsg(arg.chat_id_,arg.id_,IdVeerSaied)
 return false
 end
@@ -82,6 +84,7 @@ IdVeerSaied = IdVeerSaied:gsub("{التفاعل}",Get_Ttl(msgs))
 IdVeerSaied = IdVeerSaied:gsub("{الرسائل}",msgs)
 IdVeerSaied = IdVeerSaied:gsub("{الجهات}",NumGhaVeer)
 IdVeerSaied = IdVeerSaied:gsub("{السحكات}",editedveer)
+IdVeerSaied = IdVeerSaied:gsub("{النقاط}",gamesveer)
 sendMsg(arg.chat_id_,arg.id_,IdVeerSaied)
 else
 GetPhotoUser(data.id_,function(arg,data)
@@ -101,6 +104,7 @@ IdVeerSaied = IdVeerSaied:gsub("{التفاعل}",Get_Ttl(arg.msgs))
 IdVeerSaied = IdVeerSaied:gsub("{الرسائل}",arg.msgs)
 IdVeerSaied = IdVeerSaied:gsub("{الجهات}",NumGhaVeer)
 IdVeerSaied = IdVeerSaied:gsub("{السحكات}",editedveer)
+IdVeerSaied = IdVeerSaied:gsub("{النقاط}",gamesveer)
 sendPhoto(arg.chat_id_,arg.id_,data.photos_[0].sizes_[1].photo_.persistent_id_,IdVeerSaied,dl_cb,nil)
 else
 IdVeerSaied = (redis:get(veer..'idveer:msg'..msg.chat_id_) or 
@@ -119,6 +123,7 @@ IdVeerSaied = IdVeerSaied:gsub("{التفاعل}",Get_Ttl(arg.msgs))
 IdVeerSaied = IdVeerSaied:gsub("{الرسائل}",arg.msgs)
 IdVeerSaied = IdVeerSaied:gsub("{الجهات}",NumGhaVeer)
 IdVeerSaied = IdVeerSaied:gsub("{السحكات}",editedveer)
+IdVeerSaied = IdVeerSaied:gsub("{النقاط}",gamesveer)
 sendMsg(arg.chat_id_,arg.id_,IdVeerSaied)
 end
 end,{chat_id_=arg.chat_id_,id_=arg.id_,TheRank=arg.TheRank,sender_user_id_=data.id_,msgs=msgs,Namei=Namei,UserNameID=UserNameID,NumGhaVeer=NumGhaVeer,editedveer=editedveer})
@@ -1889,7 +1894,7 @@ end
 if MsgText[1] == "تعين الايدي" or MsgText[1] == "تعيين الايدي" then 
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
 redis:set(veer..'idveer:edit'..msg.sender_user_id_,true) 
-return "📭¦ حسننا عزيزي  ✋🏿\n🗯¦ ارسل كليشه الايدي الان\n\n🔖¦ دوال الايدي هي :👇\n👤¦ اظهار اسم العضو » `{الاسم}`\n🎫¦ اظهار معرف العضو » `{المعرف}`\n🏷¦ اظهار ايدي العضو » `{الايدي}`\n📮¦ اظهار رتبه العضو » `{الرتبه}`\n⭐️¦ اظهار تفاعل العضو » `{التفاعل}`\n💬¦ اظهار رسائل العضو » `{الرسائل}`\n📞¦ اظهار جهات العضو » `{الجهات}`\n📬¦ اظهار سحكات العضو » `{السحكات}`" 
+return "📭¦ حسننا عزيزي  ✋🏿\n🗯¦ ارسل كليشه الايدي الان\n\n🔖¦ دوال الايدي هي :👇\n👤¦ اظهار اسم العضو » `{الاسم}`\n🎫¦ اظهار معرف العضو » `{المعرف}`\n🏷¦ اظهار ايدي العضو » `{الايدي}`\n📮¦ اظهار رتبه العضو » `{الرتبه}`\n⭐️¦ اظهار تفاعل العضو » `{التفاعل}`\n💬¦ اظهار رسائل العضو » `{الرسائل}`\n📞¦ اظهار جهات العضو » `{الجهات}`\n📬¦ اظهار سحكات العضو » `{السحكات}`\n🖲¦ اظهار نقاط العضو في الالعاب » `{النقاط}`" 
 end
 
 if MsgText[1] == "مسح الايدي" or MsgText[1] == "حذف الايدي" then
