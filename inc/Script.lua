@@ -2077,6 +2077,29 @@ return false
 end
 
 if MsgText[1] == "تنظيف الوهمي" or MsgText[1] == "تنظيف الوهمي 🗑" then
+local pv = redis:smembers(veer..'users')
+local NumPvDel = 0
+for i = 1, #pv do
+sendChatAction(pv[i],"Typing",function(arg,data)
+if data.ID and data.ID == "Ok"  then
+print("Sender Ok")
+else
+print("Failed Sender Nsot Ok")
+redis:srem(veer..'users',arg.pv)
+NumPvDel = NumPvDel + 1
+end
+print(arg.pvC.." : "..arg.i)
+if arg.pvC == arg.i then 
+if NumPvDel == 0 then
+PvVeer = '👨🏼‍⚕️| جـيـد , لا يوجد مشتركين وهمي\n\n'
+else
+local SenderOk = arg.pvC - NumPvDel
+PvVeer = '👥*¦* عدد المشتركين •⊱ { *'..arg.pvC..'* } ⊰•\n♻️*¦* تـم تنظيف  •⊱ { *'..NumPvDel..'* } ⊰• مشترك \n📊*¦* اصبح العدد الحقيقي الان •⊱ { *'..SenderOk..'* } ⊰• من المشتركين\n\n'
+end
+end
+end,{chat_id_=msg.chat_id_,id_=msg.id_,pvC=#pv,pv=pv[i],i=i})
+end
+
 local groups = redis:smembers(veer..'group:ids')
 local GroupsIsFound = 0
 for i = 1, #groups do 
@@ -2092,34 +2115,12 @@ print(GroupsIsFound..' : '..arg.groupsC..' : '..arg.i)
 if arg.groupsC == arg.i then
 local GroupDel = arg.groupsC - GroupsIsFound 
 if GroupDel == 0 then
-GroupVeer = '💯*¦* جـيـد , لا توجد مجموعات وهميه \n\n'
+sendMsg(arg.chat_id_,arg.id_,PvVeer..'💯*¦* جـيـد , لا توجد مجموعات وهميه \n✓')
 else
-GroupVeer = '📑*¦* عدد المجموعات •⊱ { *'..arg.groupsC..'* } ⊰•\n🚸*¦* تـم تنظيف  •⊱ { *'..GroupDel..'* } ⊰• مجموعه \n📉*¦* اصبح العدد الحقيقي الان •⊱ { *'..GroupsIsFound..'* } ⊰• مجموعه\n\n'
+sendMsg(arg.chat_id_,arg.id_,PvVeer..'📑*¦* عدد المجموعات •⊱ { *'..arg.groupsC..'* } ⊰•\n🚸*¦* تـم تنظيف  •⊱ { *'..GroupDel..'* } ⊰• مجموعه \n📉*¦* اصبح العدد الحقيقي الان •⊱ { *'..GroupsIsFound..'* } ⊰• مجموعه\n✓')
 end
 end
 end,{chat_id_=msg.chat_id_,id_=msg.id_,groupsC=#groups,group=groups[i],i=i})
-end
-local pv = redis:smembers(veer..'users')
-local NumPvDel = 0
-for i = 1, #pv do
-sendChatAction(pv[i],"Typing",function(arg,data)
-if data.ID and data.ID == "Ok"  then
-print("Sender Ok")
-else
-print("Failed Sender Nsot Ok")
-redis:srem(veer..'users',arg.pv)
-NumPvDel = NumPvDel + 1
-end
-print(arg.pvC.." : "..arg.i)
-if arg.pvC == arg.i then 
-if NumPvDel == 0 then
-sendMsg(arg.chat_id_,arg.id_,GroupVeer..'👨🏼‍⚕️| جـيـد , لا يوجد مشتركين وهمي\n✓')
-else
-local SenderOk = arg.pvC - NumPvDel
-sendMsg(arg.chat_id_,arg.id_,GroupVeer..'👥*¦* عدد المشتركين •⊱ { *'..arg.pvC..'* } ⊰•\n♻️*¦* تـم تنظيف  •⊱ { *'..NumPvDel..'* } ⊰• مشترك \n📊*¦* اصبح العدد الحقيقي الان •⊱ { *'..SenderOk..'* } ⊰• من المشتركين\n✓') 
-end
-end
-end,{chat_id_=msg.chat_id_,id_=msg.id_,pvC=#pv,pv=pv[i],i=i})
 end
 return false
 end
