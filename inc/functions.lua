@@ -1145,9 +1145,9 @@ all_groups = '📋¦ قائمه المجموعات :<br><br>'
 for k,v in pairs(list) do 
 local info = redis:get(veer..'group:name'..v)
 if info then
-all_groups = all_groups..' '..k..'- <span style="color: #bd2a2a;">'..info.. '</span> <br> ايدي ☜ (<span style="color:#078883;">' ..v.. '</span>)<br>'
+all_groups = all_groups..' '..k..'- <span style="color: #ff0000;">'..info.. '</span> <br> الايدي ☜ (<span style="color:#0a98ff;">' ..v.. '</span>)<br>'
 else
-all_groups = all_groups..' '..k.. '- '..' ☜ (<span style="color:#078883;">' ..v.. '</span>) <br>'
+all_groups = all_groups..' '..k.. '- '..' ☜ (<span style="color:#0a98ff;">' ..v.. '</span>) <br>'
 end 
 end
 
@@ -1163,9 +1163,9 @@ file:write([[
 <link href="https://fonts.googleapis.com/css?family=Harmattan" rel="stylesheet">
 
 </head>
-<style>*{font-family: 'Harmattan', sans-serif;font-weight: 600;text-shadow: 1px 1px 16px black;}</style>
+<style>*{font-family: 'Harmattan', sans-serif;font-weight: 1000;text-shadow: black;}</style>
 <body>
-<p style="color:#018bb6;font-size: 17px;font-weight: 600;" aligin="center">قائمه المجموعات 🗣</p>
+<p style="color:#9670ff;font-size: 17px;font-weight: 600;" aligin="center">قائمه المجموعات 🗣</p>
 <hr>
 ]]..all_groups..[[
 
