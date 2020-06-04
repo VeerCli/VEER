@@ -137,10 +137,12 @@ GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
 if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* عذرا هذا العضو ليس موجود ضمن المجموعات \n❕") end
 local UserID = data.sender_user_id_
 GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data)
-USERNAME = USERNAME:gsub([[\_]],"_")
-USERCAR = utf8.len(USERNAME) 
-SendMention(arg.ChatID,arg.UserID,arg.MsgID,"🧟‍♂¦ آضـغط على آلآيدي ليتم آلنسـخ\n\n "..USERNAME.." ~⪼ { "..arg.UserID.." }",37,USERCAR)
+if data.username_ then useri = '🎟¦ المعرف » [@'..data.username_..']\n' else useri = "" end
+local namei = data.first_name_..' '..(data.last_name_ or "")
+sendMsg(arg.ChatID,arg.MsgID,'🤵🏼¦ الاسم » ['..FlterName(namei,30)..']\n'
+..'🎫¦ الايدي » {`'..arg.UserID..'`} \n'..useri
+..'📮¦ الرتبه » '..Getrtba(arg.UserID,arg.ChatID)..'\n'
+..'🕵🏻️‍♀️¦ نوع الكشف » بالرد\n➖')
 end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
 end,{ChatID=msg.chat_id_,MsgID=msg.id_})
 elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
@@ -148,7 +150,12 @@ GetUserName(MsgText[2],function(arg,data)
 if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n❕") end 
 local UserID = data.id_
 UserName = Flter_Markdown(arg.UserName)
-sendMsg(arg.ChatID,arg.MsgID,"🧟‍♂*¦* آضـغط على آلآيدي ليتم آلنسـخ\n\n "..UserName.." ~⪼ ( `"..UserID.."` )")
+UserName = UserName:gsub([[\_]],"_")
+sendMsg(arg.ChatID,arg.MsgID,'🤵🏼¦ الاسم » ['..FlterName(data.title_,30)..']\n'
+..'🎫¦ الايدي » {`'..UserID..'`} \n'
+..'🎟¦ المعرف » ['..UserName..']\n'
+..'📮¦ الرتبه » '..Getrtba(UserID,arg.ChatID)..'\n'
+..'🕵🏻️‍♀️¦ نوع الكشف » بالمعرف\n➖')
 end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
 end 
 return false
@@ -171,7 +178,6 @@ sendMsg(arg.ChatID,arg.MsgID,
 end,{ChatID=msg.chat_id_,MsgID=msg.id_}) 
 return false
 end
-
 
 if MsgText[1] == "تثبيت" and msg.reply_id then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
@@ -772,6 +778,33 @@ return false
 end
 
 if MsgText[1] == "كشف" then
+if MsgText[2] and MsgText[2]:match('-%d+') then
+if not msg.Creator then return "📛*¦*هذا الامر يخص {المطور,المنشئ} فقط  \n🚶‍♂️" end
+local VeerChatIdG = MsgText[2]
+GetFullChat(VeerChatIdG,function(arg,data)
+if not data.member_count_ then return sendMsg(msg.chat_id_,arg.MsgID,"📛¦ فشل التحقق من المجموعة\n❕") end
+local GroupName = (redis:get(veer..'group:name'..arg.ChatID) or '')
+local LinkGbVeer = data.invite_link_
+if not LinkGbVeer then
+local LinkGbVeer = ExportLink(VeerChatIdG)
+if LinkGbVeer then
+LinkGbVeer = LinkGbVeer.result
+end
+end
+sendMsg(msg.chat_id_,arg.MsgID,
+"ـ  •⊱ { مـعـلومـات الـمـجـموعـه } ⊰•\n\n"
+.."*👥¦* عدد الاعـضـاء •⊱ { *"..data.member_count_.."* } ⊰•"
+.."\n*📛¦* عدد المحظـوريـن •⊱ { *"..data.kicked_count_.."* } ⊰•"
+.."\n*🗣¦* عدد الادمـنـيـه •⊱ { *"..data.administrator_count_.."* } ⊰•"
+.."\n*🔚¦* الايــدي •⊱ { `"..arg.ChatID.."` } ⊰•"
+.."\n\nـ •⊱ {  ["..FlterName(GroupName).."]("..(LinkGbVeer or "")..")  } ⊰•\n"
+)
+end,{ChatID=VeerChatIdG,MsgID=msg.id_}) 
+return false
+end
+end
+
+if MsgText[1] == "كشف" then
 if not MsgText[2] and msg.reply_id then 
 GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
 if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* عذرا هذا العضو ليس موجود ضمن المجموعات \n❕") end
@@ -1121,15 +1154,50 @@ end
 
 if MsgText[1] == "تنزيل الكل" then
 if not msg.Creator then return "📛*¦*هذا الامر يخص {المطور,المنشئ} فقط  \n🚶‍♂️" end
-
+if not msg.reply_id then
 local Admins = redis:scard(veer..'admins:'..msg.chat_id_)
 redis:del(veer..'admins:'..msg.chat_id_)
 local NumMDER = redis:scard(veer..'owners:'..msg.chat_id_)
 redis:del(veer..'owners:'..msg.chat_id_)
 local MMEZEN = redis:scard(veer..'whitelist:'..msg.chat_id_)
 redis:del(veer..'whitelist:'..msg.chat_id_)
-
-return "🙋🏼‍♂️¦ أهلا عزيزي "..msg.TheRankCmd.." ⇓\n👤¦ تــم تنزيل  ❴ "..Admins.." ❵ من الادمنيه\n👤¦ تــم تنزيل  ❴ "..NumMDER.." ❵ من المدراء\n👤¦ تــم تنزيل  ❴ "..MMEZEN.." ❵ من المميزين\n\n👥¦ تم تنزيله من جميع الرتب\n🚶‍♂️" 
+if Admins == 0 and NumMDER == 0 and MMEZEN == 0 then
+return "🙋🏼‍♂️¦ أهلا عزيزي "..msg.TheRankCmd.." ⇓\n👥¦ لا يوجد اعضاء تملك رتب { مدير,ادمن,مميز }\n🚶‍♂️" end
+return "🙋🏼‍♂️¦ أهلا عزيزي "..msg.TheRankCmd.." ⇓\n👤¦ تــم تنزيل  ❴ "..Admins.." ❵ من الادمنيه\n👤¦ تــم تنزيل  ❴ "..NumMDER.." ❵ من المدراء\n👤¦ تــم تنزيل  ❴ "..MMEZEN.." ❵ من المميزين\n\n👥¦ تم تنزيلهم من جميع الرتب\n🚶‍♂️" 
+else
+GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
+if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* عذرا هذا العضو ليس موجود ضمن المجموعات \n❕") end
+local UserID = data.sender_user_id_
+if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"👤*¦* لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n📛") end
+GetUserID(UserID,function(arg,data)
+USERNAME = ResolveUserName(data)
+USERNAME = USERNAME:gsub([[\_]],"_")
+USERCAR = utf8.len(USERNAME) 
+if not redis:sismember(veer..'owners:'..arg.ChatID,arg.UserID) and not redis:sismember(veer..'admins:'..arg.ChatID,arg.UserID) and not redis:sismember(veer..'whitelist:'..arg.ChatID,arg.UserID) then
+return sendMsg(arg.ChatID,arg.MsgID,'👤¦ العضو » '..USERNAME..' \n🎫¦ الايدي » {'..arg.UserID..'}\n🛠¦ ليس لديه رتبه {مدير,ادمن,مميز} ليتم تنزيله منها\n✓️')
+end
+if redis:sismember(veer..'owners:'..arg.ChatID,arg.UserID) then
+redis:srem(veer..'owners:'..arg.ChatID,arg.UserID) 
+Reowner = 'مدير,'
+else
+Reowner = ''
+end
+if redis:sismember(veer..'admins:'..arg.ChatID,arg.UserID) then 
+redis:srem(veer..'admins:'..arg.ChatID,arg.UserID)
+Readmin = 'ادمن,'
+else
+Readmin = ''
+end
+if redis:sismember(veer..'whitelist:'..arg.ChatID,arg.UserID) then
+redis:srem(veer..'whitelist:'..arg.ChatID,arg.UserID)
+Rewhitelist = 'مميز'
+else
+Rewhitelist = ''
+end
+SendMention(arg.ChatID,arg.UserID,arg.MsgID,'👤¦ العضو » '..USERNAME..' \n🎫¦ الايدي » {'..arg.UserID..'}\n🛠¦ تم تنزيله من الرتب التالية ⇊\n{ '..Reowner..Readmin..Rewhitelist..' }\n✓️',12,utf8.len(USERNAME))
+end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
+end,{ChatID=msg.chat_id_,MsgID=msg.id_})
+end
 end
 
 --{ Commands For locks }
@@ -1436,7 +1504,7 @@ end
 if MsgText[2] == 'الرابط' then
 if not msg.Director then return "📛*¦* هذا الامر يخص {المطور,المنشئ,المدير} فقط  \n🚶" end
 if not redis:get(veer..'linkGroup'..msg.chat_id_) then 
-return "*⚙️*¦ لا يوجد رابط مضاف اصلا " 
+return "⚙️¦ اوه 🙀 لا يوجد رابط مضاف اصلا ☹️\n📡" 
 end
 redis:del(veer..'linkGroup'..msg.chat_id_)
 return "🙋🏼‍♂️*¦* أهلا عزيزي "..msg.TheRankCmd.."   \n📛¦ تم مسح رابط المجموعه \n✓"
@@ -2163,9 +2231,12 @@ return '📭¦ حسننا عزيزي 🍁\n💬¦ الان قم بارسال ا�
 end
 
 if MsgText[1] == 'مسح كليشه المطور' or MsgText[1] == "حذف كليشه المطور" then 
+if not redis:get(veer..":TEXT_SUDO") then
+return '⚙️¦ اوه 🙀 لا يوجد كليشه مطور اصلا ☹️\n🛠' end
 redis:del(veer..':TEXT_SUDO') 
-return '🚫¦ تم حذف كليشه المطور \n🛠' 
+return '🙋🏼‍♂️¦ أهلا عزيزي المطور 👨🏻‍✈️   \n📛¦ تم مسح كليشه المطور\n✓' 
 end
+
 
 if MsgText[1] == "ضع شرط التفعيل" and MsgText[2] and MsgText[2]:match('^%d+$') then 
 redis:set(veer..':addnumberusers',MsgText[2]) 
@@ -2424,7 +2495,21 @@ if MsgText[1] == 'اصدار السورس' or MsgText[1] == 'الاصدار' the
 return '👨🏾‍🔧¦ اصدار سورس فـيـر : *v'..version..'* \n📡'
 end
 
-if (MsgText[1] == 'تحديث السورس' or MsgText[1] == 'تحديث السورس ™') then
+if MsgText[1] == 'تحميل' then
+if MsgText[2] and MsgText[2]:match('%a%d_/-?=') then
+local yt = MsgText[2]
+local url = https.request('https://yt.gmsm.xyz/veer.php?key=VeerKeySaiedAymenTrue&url='..yt)
+if url then
+sendAudio(msg.chat_id_,msg.id_,url,"","BY : @VeerCliBot")
+return false
+else
+return "🖇| الرابط الذي ادخلته غير صحيح \n‍📮*¦* يرجى وضع رابط يوتيوب صحيح \n📛"
+end 
+end
+return false
+end
+
+if (MsgText[1] == 'تحديث السورس' or MsgText[1] == 'تحديث السورس ™' or MsgText[1] == "/UpdateSource") then
 if not msg.SudoBase then return "📛*¦* هذا الامر يخص {المطور الاساسي} فقط  \n🚶" end
 local GetVerison = https.request('https://raw.githubusercontent.com/VeerCli/veerbot/master/GetVersion.txt') or 0
 if GetVerison > version then
@@ -2642,13 +2727,14 @@ return"📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل الاس�
 end
 
 if MsgText[1] == 'server' then
-if not msg.SudoUser then return "For Sudo Only." end
+if not msg.SudoUser then return "📛*¦* هذا الامر يخص {المطور الاساسي} فقط  \n🚶" end
 return io.popen([[
 
 linux_version=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 || uname -om`
 memUsedPrc=`free -m | awk 'NR==2{printf "%sMB/%sMB {%.2f%}\n", $3,$2,$3*100/$2 }'`
 HardDisk=`df -lh | awk '{if ($6 == "/") { print $3"/"$2" ~ {"$5"}" }}'`
 CPUPer=`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`
+ISP=`curl https://veer.gmsm.xyz/ISP.php`
 uptime=`uptime | awk -F'( |,|:)+' '{if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}'`
 
 echo '📟 •⊱ { Seystem } ⊰•\n*»» '"$linux_version"'*' 
@@ -2656,6 +2742,7 @@ echo '*------------------------------\n*🔖 •⊱ { Memory } ⊰•\n*»» '"$
 echo '*------------------------------\n*💾 •⊱ { HardDisk } ⊰•\n*»» '"$HardDisk"'*'
 echo '*------------------------------\n*⚙️ •⊱ { Processor } ⊰•\n*»» '"`grep -c processor /proc/cpuinfo`""Core ~ {$CPUPer%} "'*'
 echo '*------------------------------\n*📡 •⊱ { Location } ⊰•\n*»» ]]..DataCenter..[[*'
+echo '*------------------------------\n*🛠l •⊱ { ISP } ⊰•\n*»» '"$ISP"'*'
 echo '*------------------------------\n*👨🏾‍🔧 •⊱ { Server[_]Login } ⊰•\n*»» '`whoami`'*'
 echo '*------------------------------\n*🔌 •⊱ { Uptime } ⊰•  \n*»» '"$uptime"'*'
 ]]):read('*all')
@@ -2663,13 +2750,14 @@ end
 
 
 if MsgText[1] == 'السيرفر' or MsgText[1] == "السيرفر 📟" then
-if not msg.SudoUser then return "For Sudo Only." end
+if not msg.SudoUser then return "📛*¦* هذا الامر يخص {المطور الاساسي} فقط  \n🚶" end
 return io.popen([[
 
 linux_version=`lsb_release -ds`
 memUsedPrc=`free -m | awk 'NR==2{printf "%sMB/%sMB {%.2f%}\n", $3,$2,$3*100/$2 }'`
 HardDisk=`df -lh | awk '{if ($6 == "/") { print $3"/"$2" ~ {"$5"}" }}'`
 CPUPer=`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`
+ISP=`curl https://veer.gmsm.xyz/ISP.php`
 uptime=`uptime | awk -F'( |,|:)+' '{if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}'`
 
 echo '📟l •⊱ { نظام التشغيل } ⊰•\n*»» '"$linux_version"'*' 
@@ -2677,6 +2765,7 @@ echo '*------------------------------\n*🔖l •⊱ { الذاكره العشو
 echo '*------------------------------\n*💾l •⊱ { وحـده الـتـخـزيـن } ⊰•\n*»» '"$HardDisk"'*'
 echo '*------------------------------\n*⚙️l •⊱ { الـمــعــالــج } ⊰•\n*»» '"`grep -c processor /proc/cpuinfo`""Core ~ {$CPUPer%} "'*'
 echo '*------------------------------\n*📡l •⊱ { موقـع الـسـيـرفـر } ⊰•\n*»» ]]..DataCenter..[[*'
+echo '*------------------------------\n*🛠l •⊱ { مـزود الـخـدمـة } ⊰•\n*»» '"$ISP"'*'
 echo '*------------------------------\n*👨🏾‍🔧l •⊱ { الــدخــول } ⊰•\n*»» '`whoami`'*'
 echo '*------------------------------\n*🔌l •⊱ { مـده تـشغيـل الـسـيـرفـر } ⊰•  \n*»» '"$uptime"'*'
 ]]):read('*all')
@@ -3500,12 +3589,12 @@ return sendMsg(msg.chat_id_,msg.id_,'🗯¦ الان تم وضع الرابط ج
 end
 
 if redis:get(veer..'fwd:all'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه عام
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات وللمشتركين ...')			
 redis:del(veer..'fwd:all'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')  
 local groups = redis:smembers(veer..'group:ids')
 local allgp =  #pv + #groups
 if allgp >= 300 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات وللمشتركين ...')			
 end
 for i = 1, #pv do 
 sendMsg(pv[i],0,Flter_Markdown(msg.text))
@@ -3517,10 +3606,10 @@ return sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه الكليشه ب�
 end
 
 if redis:get(veer..'fwd:pv'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر الرساله للمشتركين ...')			
 redis:del(veer..'fwd:pv'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')
 if #pv >= 300 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر الرساله للمشتركين ...')			
 end
 local NumPvDel = 0
 for i = 1, #pv do
@@ -3530,10 +3619,10 @@ sendMsg(msg.chat_id_,msg.id_,'🙍🏼‍♂️*¦* عدد المشتركين : 
 end
 
 if redis:get(veer..'fwd:groups'..msg.sender_user_id_) then ---- استقبال رساله الاذاعه خاص
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر الرساله للمجموعات ...')			
 redis:del(veer..'fwd:groups'..msg.sender_user_id_)
 local groups = redis:smembers(veer..'group:ids')
 if #groups >= 300 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر الرساله للمجموعات ...')			
 end
 local NumGroupsDel = 0
 for i = 1, #groups do 
@@ -3544,12 +3633,12 @@ end
 end 
 
 if msg.forward_info_ and redis:get(veer..'fwd:'..msg.sender_user_id_) then
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات وللمشتركين ...')			
 redis:del(veer..'fwd:'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')
 local groups = redis:smembers(veer..'group:ids')
 local allgp =  #pv + #groups
 if allgp == 500 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات وللمشتركين ...')			
 end
 local number = 0
 for i = 1, #pv do 
@@ -3562,11 +3651,11 @@ return sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه التوجيه ب�
 end
 
 if msg.forward_info_ and redis:get(veer..'fwd:groupsveer'..msg.sender_user_id_) then
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات ...')			
 redis:del(veer..'fwd:groupsveer'..msg.sender_user_id_)
 local groups = redis:smembers(veer..'group:ids')
 local allgroupsfwd =  #groups
 if allgroupsfwd == 500 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمجموعات ...')			
 end
 local number = 0
 for i = 1, #groups do 
@@ -3576,11 +3665,11 @@ return sendMsg(msg.chat_id_,msg.id_,'📜*¦* تم اذاعه التوجيه ب�
 end
 
  if msg.forward_info_ and redis:get(veer..'fwd:number'..msg.sender_user_id_) then
+sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمشتركين ...')   
 redis:del(veer..'fwd:number'..msg.sender_user_id_)
 local pv = redis:smembers(veer..'users')
 local allpvfwd =  #pv
 if allpvfwd == 500 then
-sendMsg(msg.chat_id_,msg.id_,'📑| اهلا عزيزي المطور \n🔖| جاري نشر التوجيه للمشتركين ...')   
 end
 local number = 0
 for i = 1, #pv do 
@@ -4010,7 +4099,7 @@ elseif redis:get(veer..':tqeed_video:'..msg.chat_id_) then
 Del_msg(msg.chat_id_,msg.id_,function(arg,data)
 print("\27[1;31m The user restricted becuse send video \27[0m")
 if data.ID == "Error" and data.code_ == 6 then
-return sendMsg(arg.chat_id_,arg.id_,'📛*¦* لا يمكنني مسح الرساله المخالفه .\n🎟*¦* لست مشرف او ليس لدي صلاحيه  الحذف \n ❕')    
+return sendMsg(arg.chat_id_,arg.id_,'??*¦* لا يمكنني مسح الرساله المخالفه .\n🎟*¦* لست مشرف او ليس لدي صلاحيه  الحذف \n ❕')    
 end
 Restrict(arg.chat_id_,arg.sender_user_id_,3)
 end,{chat_id_=msg.chat_id_,id_=msg.id_,sender_user_id_=msg.sender_user_id_})
@@ -4363,7 +4452,7 @@ local lovm = {
 }
 local song = {
 "عمي يبو البار 🤓☝🏿️ \nصبلي لبلبي ترى اني سكران 😌 \n وصاير عصبي 😠 \nانه وياج يم شامه 😉 \nوانه ويــــاج يم شامه  شد شد  👏🏿👏🏿 \nعدكم سطح وعدنه سطح 😁 \n نتغازل لحد الصبح 😉 \n انه وياج يم شامه 😍 \n وانه وياج فخريه وانه وياج حمديه 😂🖖🏿\n ",
-"اي مو كدامك مغني قديم 😒🎋 هوه ﴿↜ انـِۨـۛـِۨـۛـِۨيـُِـٌِہۧۥۛ ֆᵛ͢ᵎᵖ ⌯﴾❥  ربي كامز و تكلي غنيلي 🙄😒 آإرۈحُـ✯ـہ✟  😴أنــ💤ــااااام😴  اشرف تالي وكت يردوني اغني 😒☹️🚶","لا تظربني لا تظرب 💃💃 كسرت الخيزارانه💃🎋 صارلي سنه وست اشهر💃💃 من ظربتك وجعانه🤒😹",
+"اي مو كدامك مغني قديم 😒🎋 هوه ﴿↜ انـِۨـۛـِۨـۛـِۨيـُِـٌِہۧۥۛ ֆᵛ͢ᵎᵖ ⌯﴾❥  ربي كامز و تكلي غنيلي 🙄😒 آإرۈحُـ✯ـہ✟  😴أنــ💤ــااااام??  اشرف تالي وكت يردوني اغني 😒☹️🚶","لا تظربني لا تظرب 💃💃 كسرت الخيزارانه💃🎋 صارلي سنه وست اشهر💃💃 من ظربتك وجعانه🤒😹",
 "موجوع كلبي😔والتعب بية☹️من اباوع على روحي😢ينكسر كلبي عليه😭",
 "ايامي وياها👫اتمنا انساها😔متندم اني حيل😞يم غيري هيه💃تضحك😂عليه😔مقهور انام الليل😢كاعد امسح بل رسائل✉️وجان اشوف كل رسايلها📩وبجيت هوايه😭شفت احبك😍واني من دونك اموت😱وشفت واحد 🚶صار هسه وياية👬اني رايدها عمر عمر تعرفني كل زين🙈 وماردت لا مصلحة ولاغايه😕والله مافد يوم بايسها💋خاف تطلع🗣البوسه💋وتجيها حجايه😔️",
 "😔صوتي بعد مت سمعه✋يال رايح بلا رجعة🚶بزودك نزلت الدمعة ذاك اليوم☝️يال حبيتلك ثاني✌روح وياه وضل عاني😞يوم اسود علية اني🌚 ذاك اليوم☝️تباها بروحك واضحك😂لان بجيتلي عيني😢😭 وافراح يابعد روحي😌خل الحركة تجويني😔🔥صوتي بعد متسمعة🗣✋",
@@ -4519,7 +4608,7 @@ GetUserID(msg.sender_user_id_,function(arg,data)
 if data.username_ then USERNAME = '@'..data.username_ else USERNAME = FlterName(data) end
 USERNAME = USERNAME:gsub([[\_]],"_")
 USERCAR = utf8.len(USERNAME) 
-SendMention(msg.chat_id_,data.id_,msg.id_,"🧟‍♂¦ آضـغط على آلآيدي ليتم آلنسـخ\n\n "..USERNAME.." ~⪼ ( "..data.id_.." )",37,USERCAR)  
+sendMsg(msg.chat_id_,msg.id_,"🧟‍♂¦ آضـغط على آلآيدي ليتم آلنسـخ\n\n ["..USERNAME.."] ~⪼ ( `"..data.id_.."` )")  
 return false
 end)
 elseif Text=="اريد رابط الحذف" or Text=="اريد رابط حذف" or Text=="رابط حذف" or Text=="رابط الحذف" then
@@ -4605,6 +4694,7 @@ Veer = {
 "^(ايدي) (@[%a%d_]+)$",
 "^(كشف)$",
 "^(كشف) (%d+)$",
+"^(كشف) (-%d+)$",
 "^(كشف) (@[%a%d_]+)$",
 '^(رفع مميز)$',
 '^(رفع مميز) (@[%a%d_]+)$',
@@ -4775,6 +4865,7 @@ Veer = {
 "^(الردود العامه 🗨)$",
 "^(اضف رد)$",
 "^(/UpdateSource)$",
+"^(تحميل) ([%a%d_/-?=]+)$",
 "^(تحديث السورس ™)$",
 "^(تحديث السورس)$",
 "^(تنظيف المجموعات)$",
