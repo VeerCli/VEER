@@ -2495,20 +2495,6 @@ if MsgText[1] == 'اصدار السورس' or MsgText[1] == 'الاصدار' the
 return '👨🏾‍🔧¦ اصدار سورس فـيـر : *v'..version..'* \n📡'
 end
 
-if MsgText[1] == 'تحميل' then
-if MsgText[2] and MsgText[2]:match('%a%d_/-?=') then
-local yt = MsgText[2]
-local url = https.request('https://yt.gmsm.xyz/veer.php?key=VeerKeySaiedAymenTrue&url='..yt)
-if url then
-sendAudio(msg.chat_id_,msg.id_,url,"","BY : @VeerCliBot")
-return false
-else
-return "🖇| الرابط الذي ادخلته غير صحيح \n‍📮*¦* يرجى وضع رابط يوتيوب صحيح \n📛"
-end 
-end
-return false
-end
-
 if (MsgText[1] == 'تحديث السورس' or MsgText[1] == 'تحديث السورس ™' or MsgText[1] == "/UpdateSource") then
 if not msg.SudoBase then return "📛*¦* هذا الامر يخص {المطور الاساسي} فقط  \n🚶" end
 local GetVerison = https.request('https://raw.githubusercontent.com/VeerCli/veerbot/master/GetVersion.txt') or 0
@@ -4865,7 +4851,6 @@ Veer = {
 "^(الردود العامه 🗨)$",
 "^(اضف رد)$",
 "^(/UpdateSource)$",
-"^(تحميل) ([%a%d_/-?=]+)$",
 "^(تحديث السورس ™)$",
 "^(تحديث السورس)$",
 "^(تنظيف المجموعات)$",
