@@ -4594,7 +4594,7 @@ GetUserID(msg.sender_user_id_,function(arg,data)
 if data.username_ then USERNAME = '@'..data.username_ else USERNAME = FlterName(data) end
 USERNAME = USERNAME:gsub([[\_]],"_")
 USERCAR = utf8.len(USERNAME) 
-sendMsg(msg.chat_id_,msg.id_,"🧟‍♂¦ آضـغط على آلآيدي ليتم آلنسـخ\n\n ["..USERNAME.."] ~⪼ ( `"..data.id_.."` )")  
+send_msg(msg.chat_id_,"🧟‍♂¦ آضـغط على آلآيدي ليتم آلنسـخ\n\n ["..USERNAME.."](tg://user?id="..data.id_..") ~⪼ ( `"..data.id_.."` )",msg.id_)  
 return false
 end)
 elseif Text=="اريد رابط الحذف" or Text=="اريد رابط حذف" or Text=="رابط حذف" or Text=="رابط الحذف" then
