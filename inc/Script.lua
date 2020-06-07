@@ -2284,7 +2284,7 @@ return false
 end
 
 if MsgText[1] == 'المطور' then
-return redis:get(veer..":TEXT_SUDO") or '🗃¦ لا توجد كليشه المطور .\n📰¦ يمكنك اضافه كليشه من خلال الامر\n       " `ضع كليشه المطور` " \n📡'
+return send_msg(msg.chat_id_,redis:get(veer..":TEXT_SUDO") or '🗃¦ لا توجد كليشه المطور .\n📰¦ يمكنك اضافه كليشه من خلال الامر\n       " `ضع كليشه المطور` " \n📡',msg.id_)
 end
 
 if MsgText[1] == "اذاعه عام بالتوجيه" or MsgText[1] == "اذاعه عام بالتوجيه 📣" then
@@ -3264,6 +3264,11 @@ xsudouser = SUDO_USER:gsub('⚖️¦ مـعرف آلمـطـور  : @','')
 xsudouser = xsudouser:gsub([[\_]],'_')
 local inline = {{{text="آلمـطـور 💬!",url="t.me/"..xsudouser}}}
 send_key(msg.sender_user_id_,text,nil,inline,msg.id_)
+GetUserID(msg.sender_user_id_,function(arg,data)
+Name = FlterName(data,20)
+if data.username_ then UserName = "\n🎟¦ الـمعرف •⊱ [@"..data.username_.."] ⊰•" else UserName = "" end
+send_msg(SUDO_ID,"👨🏻‍✈️¦ قام شخص بالدخول إلى البوت ...\n\nــــــــــــــــــــــــــــــــــــــــــ\n📑¦ معلومات الشخص \n🤵🏻¦ الاسـم •⊱{ *"..Name.."* }⊰•"..UserName.."\n🆔¦ الايدي •⊱ ["..data.id_.."](tg://user?id="..data.id_..") ⊰•\nــــــــــــــــــــــــــــــــــــــــــ\n📆¦ التاريخ •⊱ *"..os.date("%Y/%m/%d").."* ⊰•\n⏱¦ الساعه •⊱ "..os.date("%I:%M%p").." ⊰•")
+end,{data=data})
 return false
 end
 end
@@ -3505,8 +3510,8 @@ if utf8.len(msg.text) > 2500 then
 sendMsg(msg.chat_id_,msg.id_,"📛¦ لا يمكنك وضع كليشه باكثر من 2500 حرف\n❕")
 else
 redis:del(veer..'text_sudo:witting'..msg.sender_user_id_) 
-redis:set(veer..':TEXT_SUDO',Flter_Markdown(msg.text))
-sendMsg(msg.chat_id_,msg.id_, "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  "..Flter_Markdown(msg.text).."  *}*\n✓")
+redis:set(veer..':TEXT_SUDO',msg.text)
+send_msg(msg.chat_id_, "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  "..msg.text.."  *}*\n✓",msg.id_)
 end
 return false
 end
