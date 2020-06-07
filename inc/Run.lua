@@ -150,7 +150,7 @@ if not SUDO_ID then io.popen("rm -fr ./inc/Token.txt") end
 SUDO_USER = redis:hgetall(veer..'username:'..SUDO_ID).username
 version = redis:get(veer..":VERSION")
 DataCenter = redis:get(veer..":DataCenter:")
-
+	
 local ok, ERROR =  pcall(function() loadfile("./inc/functions.lua")() end)
 if not ok then 
 print('\27[31m! Error File Not "Run inc/functions.lua" !\n\27[39m')
@@ -163,6 +163,14 @@ print('\27[31m! Error File Not "Run inc/locks.lua" !\n\27[39m')
 print(tostring(io.popen("lua inc/locks.lua"):read('*all')))
 end
 
+download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/run','./run')
+	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/Run.lua','./inc/Run.lua')
+	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/Script.lua','./inc/Script.lua')
+	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/functions.lua','./inc/functions.lua')
+	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/locks.lua','./inc/locks.lua')
+	dofile("./inc/Run.lua")
+	print("| Reload is Successful ~ ./inc/Run.lua")
+	
 print('\27[0;33m>>'..[[
 
 
@@ -595,11 +603,6 @@ function tdcli_update_callback(data)
 	end
 	end
 	msg.text = msg.content_.text_
-	if (msg.text=="تحديث" or msg.text=="we" or msg.text=="تحديث ♻️") and msg.sender_user_id_ == SUDO_ID then
-	return sendMsg(msg.chat_id_,msg.id_," 🗂¦ تہ‏‏م تحديث آلمـلفآت \n✓",function(arg,data)
-	Refresh_Start = true
-	end)
-	end 
 	if (msg.text=="Update Source" or msg.text=="Update Source 📥") and msg.sender_user_id_ == SUDO_ID then
 
 	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/run','./run')
@@ -612,7 +615,7 @@ function tdcli_update_callback(data)
 	print("| Reload is Successful ~ ./inc/Run.lua")
 	end)  
 	end
-	if (msg.text=="reload" or msg.text=="Reload" or msg.text=="Reload 🔁") and msg.sender_user_id_ == SUDO_ID then
+	if (msg.text=="reload" or msg.text=="Reload" or msg.text=="إعادة تشغيل 🔁") and msg.sender_user_id_ == SUDO_ID then
 	sendMsg(msg.chat_id_,msg.id_,'👷🏽| {* تــم أعـاده تشغيل البوت  *} 📡.\n\n👨🏼‍💼| { Bot is Reloaded » }👍🏿',function(arg,data)
 	dofile("./inc/Run.lua")
 	print("| Reload is Successful ~ ./inc/Run.lua\n")
