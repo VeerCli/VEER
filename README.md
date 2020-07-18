@@ -19,4 +19,4 @@
 * sudo rm ./VEER/inc/Token.txt ;./VEER/run
 
 
-# [سعيد السوري ...🍃](https://t.me/SA3ED)
+* [سعيد السوري ...🍃](https://t.me/SA3ED)
