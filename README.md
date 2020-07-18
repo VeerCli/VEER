@@ -1,4 +1,4 @@
-# سعيد السوري ...#  تنصيب سورس فير الجديد  v1.1 ⇓⇓⇓ 
+#  تنصيب سورس فير الجديد  v1.1 ⇓⇓⇓ 
 
 * git clone https://github.com/veercli/VEER.git;cd VEER;chmod +x ins;./ins
 
