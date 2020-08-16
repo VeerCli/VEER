@@ -75,7 +75,8 @@ IdVeerSaied = (redis:get(veer..'idveer:msg'..msg.chat_id_) or
 ..'🏷¦ ايديــك •⊱ {`'..data.id_..'`} ⊰•\n\n'
 ..'📮¦ رتبتـــك •⊱ '..arg.TheRank..' ⊰•\n'
 ..'⭐️¦ تفاعـلك » '..Get_Ttl(msgs)..'\n'
-..'💬¦ رسائلك •⊱ {'..msgs..'} ⊰•\n➖')
+..'💬¦ رسائلك •⊱ {'..msgs..'} ⊰•\n'
+..'🖲¦ نقاطك •⊱ {'..gamesveer..'} ⊰•\n➖')
 local IdVeerSaied = IdVeerSaied:gsub("{الاسم}",Namei)
 local IdVeerSaied = IdVeerSaied:gsub("{المعرف}",UserNameVeer)
 IdVeerSaied = IdVeerSaied:gsub("{الايدي}",data.id_)
@@ -95,7 +96,8 @@ IdVeerSaied = (redis:get(veer..'idveer:msg'..msg.chat_id_) or
 ..arg.UserNameID
 ..'📡¦ رتبتـــك •⊱ '..arg.TheRank..' ⊰•\n'
 ..'⭐️¦ تفاعـلك •⊱ '..Get_Ttl(arg.msgs)..'⊰•\n'
-..'💬¦ رسائلك •⊱ {'..arg.msgs..'} ⊰•\n➖')
+..'💬¦ رسائلك •⊱ {'..arg.msgs..'} ⊰•\n'
+..'🖲¦ نقاطك •⊱ {'..gamesveer..'} ⊰•\n➖')
 local IdVeerSaied = IdVeerSaied:gsub("{الاسم}",arg.Namei)
 local IdVeerSaied = IdVeerSaied:gsub("{المعرف}",UserNameVeer)
 IdVeerSaied = IdVeerSaied:gsub("{الايدي}",arg.sender_user_id_)
@@ -114,7 +116,8 @@ IdVeerSaied = (redis:get(veer..'idveer:msg'..msg.chat_id_) or
 ..'🏷¦ ايديــك •⊱ {`'..arg.sender_user_id_..'`} ⊰•\n\n'
 ..'📮¦ رتبتـــك •⊱ '..arg.TheRank..' ⊰•\n'
 ..'⭐️¦ تفاعـلك » '..Get_Ttl(arg.msgs)..'\n'
-..'💬¦ رسائلك •⊱ {'..arg.msgs..'} ⊰•\n➖')
+..'💬¦ رسائلك •⊱ {'..arg.msgs..'} ⊰•\n'
+..'🖲¦ نقاطك •⊱ {'..gamesveer..'} ⊰•\n➖')
 local IdVeerSaied = IdVeerSaied:gsub("{الاسم}",arg.Namei)
 local IdVeerSaied = IdVeerSaied:gsub("{المعرف}",UserNameVeer)
 IdVeerSaied = IdVeerSaied:gsub("{الايدي}",arg.sender_user_id_)
