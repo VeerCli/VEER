@@ -648,6 +648,8 @@ end
 function Getrtba(UserID,ChatID)
 if UserID == our_id then 
 var = 'هذا البوت 🙄☝🏿' 
+elseif UserID == 572206438 then 
+var = 'مطور السورس 👨🏻‍🔧'
 elseif  UserID == SUDO_ID then
 var = 'مطور اساسي 👨🏻‍✈️' 
 elseif redis:sismember(veer..':SUDO_BOT:',UserID) then
