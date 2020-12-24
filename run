@@ -103,34 +103,19 @@ fi
 
 
 chmod +x ./TG  
-Loops=0
+
 if [ "$1" == "R" ]; then
-while [[ $Loops -le 5 ]]; do
+while true; do
 sleep 1s
 sudo rm -fr ~/.telegram-cli
 ./TG -s ./inc/Run.lua --bot=$TOKEN
-let Plas=Loops+1
-Check=`redis-cli ping`
-if [[ $Check == "" ]]; then
-Loops=6
-else
-redis-cli SETEX $TOKEN 3 $Plas
-Loops=`redis-cli GET ${TOKEN}`
-echo $Loops
-if [[ $Loops == 5 ]]; then
-curl "https://api.telegram.org/bot${TOKEN}/sendmessage" -F "chat_id=${Sudo}" -F "text=📛¦ تنبيه: يوجد ضغط على السيرفر لذلك تم ايقاف البوت اذا اردت اعادة تشغيل البوت فقط ارسل في الترمنل امر الرن ./VEER/run" &>/dev/null
-screen -X -S vbot quit
-fi
-fi
 done
 else 
-if [[ $Loops == 0 ]]; then
-if ! screen -list | grep -q "vbot"; then
-screen -S vbot ./run R
+BOTIDS=`echo $TOKEN | cut -f1 -d":"`
+if ! screen -list | grep -q "veer_$BOTIDS"; then
+screen -S veer_$BOTIDS ./run R
 else
-screen -X -S vbot quit
-screen -S vbot ./run R
+screen -X -S veer_$BOTIDS quit
+screen -S veer_$BOTIDS ./run R
 fi
 fi
-fi
-
