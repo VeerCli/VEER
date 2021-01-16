@@ -2723,7 +2723,7 @@ linux_version=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | he
 memUsedPrc=`free -m | awk 'NR==2{printf "%sMB/%sMB {%.2f%}\n", $3,$2,$3*100/$2 }'`
 HardDisk=`df -lh | awk '{if ($6 == "/") { print $3"/"$2" ~ {"$5"}" }}'`
 CPUPer=`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`
-ISP=`curl https://veer.gmsm.xyz/ISP.php`
+ISP=`curl https://veer.saied.us/ISP.php`
 uptime=`uptime | awk -F'( |,|:)+' '{if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}'`
 
 echo '📟 •⊱ { Seystem } ⊰•\n*»» '"$linux_version"'*' 
@@ -2746,7 +2746,7 @@ linux_version=`lsb_release -ds`
 memUsedPrc=`free -m | awk 'NR==2{printf "%sMB/%sMB {%.2f%}\n", $3,$2,$3*100/$2 }'`
 HardDisk=`df -lh | awk '{if ($6 == "/") { print $3"/"$2" ~ {"$5"}" }}'`
 CPUPer=`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}'`
-ISP=`curl https://veer.gmsm.xyz/ISP.php`
+ISP=`curl https://veer.saied.us/ISP.php`
 uptime=`uptime | awk -F'( |,|:)+' '{if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}'`
 
 echo '📟l •⊱ { نظام التشغيل } ⊰•\n*»» '"$linux_version"'*' 
