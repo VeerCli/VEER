@@ -5,12 +5,12 @@
 #  ███    ███   ███    █▀    ███    █▀    ███    ███ 
 #  ███    ███  ▄███▄▄▄      ▄███▄▄▄      ▄███▄▄▄▄██▀  Bot : @VeerCliBot
 #  ███    ███ ▀▀███▀▀▀     ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   
-#  ███    ███   ███    █▄    ███    █▄  ▀███████████ Dev : @RSAIED and @YYBYY
+#  ███    ███   ███    █▄    ███    █▄  ▀███████████ Dev : @RSAIED
 #  ███    ███   ███    ███   ███    ███   ███    ███ 
 #  ▀██████▀    ██████████   ██████████   ███    ███  By Source Veer
+
 #---------------------------------------------------------------------
 cd $(cd $(dirname $0); pwd)
- 
 RED='\033[0;31m'
 SMAY='\033[0;36m' 
 GREEN='\033[0;32m'
@@ -21,44 +21,6 @@ WHITEC='\033[01;91m'
 CNIL='\033[0m'
 Version=`lsb_release -rs | cut -f1 -d"."`
 
-if [ "$Version" == "18" ];then
-echo -e "${GREEN}
-  ▄█    █▄     ▄████████    ▄████████    ▄████████  Channel : @VeerCli 
-  ███    ███   ███    ███   ███    ███   ███    ███ 
-  ███    ███   ███    █▀    ███    █▀    ███    ███ 
-  ███    ███  ▄███▄▄▄      ▄███▄▄▄      ▄███▄▄▄▄██▀  Bot : @VeerCliBot
-  ███    ███ ▀▀███▀▀▀     ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   
-  ███    ███   ███    █▄    ███    █▄  ▀███████████ Dev : @RSAIED and @YYBYY
-  ███    ███   ███    ███   ███    ███   ███    ███ 
-  ▀██████▀    ██████████   ██████████   ███    ███  By Source Veer
- ---------------------------------------------------------------------${CNIL}"
-echo -e "${RED}| للاسف لايمكنك تنصيب السورس ع نظام اوبنتو {${Version}} يجب ان يكون على اصدار  اقل مثلا  ${SMAY}14 او 16
-${CNIL}";
-echo -e "${RED}| Sorry Canot install Source on Ubuntu {${Version}} Please install system To Ubuntu ${SMAY}14 or 16 ${RED} For Run The Source Veer 
-${CNIL}";
-exit;
-fi
-
-CPUPer=`top -b -n1 | grep "Cpu(s)" | awk '{print $2 + $4}' | cut -f1 -d"."`
-if [[ $CPUPer -gt 90 ]]; then
-echo -e "${SMAY}\n"
-echo -e " ▄█    █▄     ▄████████    ▄████████    ▄████████  Channel : @VeerCli 
-echo -e " ███    ███   ███    ███   ███    ███   ███    ███ 
-echo -e " ███    ███   ███    █▀    ███    █▀    ███    ███ 
-echo -e " ███    ███  ▄███▄▄▄      ▄███▄▄▄      ▄███▄▄▄▄██▀  Bot : @VeerCliBot
-echo -e " ███    ███ ▀▀███▀▀▀     ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   
-echo -e " ███    ███   ███    █▄    ███    █▄  ▀███████████ Dev : @RSAIED and @YYBYY
-echo -e " ███    ███   ███    ███   ███    ███   ███    ███ 
-echo -e " ▀██████▀    ██████████   ██████████   ███    ███  By Source Veer
-echo -e " ---------------------------------------------------------------------"
-echo -e "${CNIL}"
-echo -e "${RED}
-¦
-¦ CAUTION:${WHITB} Cpu is load full > 90% .
-¦ Please clean your Work in ${Yellow}You Server ${WHITB}And Run Again${SMAY} Source VEER${CNIL} . \n
-\n\n"
-exit;
-fi
 
 if [ ! -f "./TG" ]; then
 echo -e "${RED}
@@ -71,6 +33,7 @@ chmod +x ./ins
 exit;
 fi
 
+
 if [ ! -f "./inc/Token.txt" ]; then
 echo -e "${RED}
 ¦
@@ -82,25 +45,13 @@ exit;
 else
 TOKEN=`cat ./inc/Token.txt`
 BOTID=`echo $TOKEN | cut -f1 -d":"`
-Check=`redis-cli ping`
-if [[ $Check == "" ]]; then
-echo -e "${RED}
-¦ CAUTION:${WHITB} Rides is Not Working .
-¦ Please Run Redis From This Command ${SMAY}service redis-server start${WHITB} . \n
-\n\n"
-exit;
-fi
-
-Sudo=`redis-cli get ${BOTID}:SUDO_ID:`
+Sudo=$(redis-cli get ${BOTID}:SUDO_ID:)
 if [[ $Sudo == "" ]]; then
-echo "sudo is empty"
 rm -fr ./inc/Token.txt
 lua ./inc/Run.lua
 exit;
 fi
-
 fi
-
 
 chmod +x ./TG  
 
